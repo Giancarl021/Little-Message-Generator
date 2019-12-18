@@ -1,9 +1,10 @@
 const bots = {
-    browser: require('./bots/browser')
+    browser: require('./bots/phrase')
 };
 
 async function main() {
-    await bots.browser();
+    const phrases = await bots.browser();
+    console.log(phrases, phrases.length);
 }
 
 main();
