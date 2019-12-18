@@ -1,2 +1,2 @@
 # Little-Message-Generator
-Frases Motivacionais em mp4 para você
+A bot sequence that create a mp4 with motivational quotes
