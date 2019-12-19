@@ -1,12 +1,12 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
-const phrasesQnt = 10;
+const {phraseCount} = require('./../data').phrase;
 
 async function main() {
   console.log('>> Initializing phrase bot');
     let consecutiveMiss = 0, skip;
     const phrases = [];
-    while (phrases.length < phrasesQnt) {
+    while (phrases.length < phraseCount) {
         skip = false;
         if (consecutiveMiss === 15) {
             throw new Error('Connection Failed');

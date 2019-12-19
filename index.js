@@ -1,10 +1,11 @@
 const bots = {
-    phrase: require('./bots/phrase')
+    phrase: require('./bots/phrase'),
+    image: require('./bots/image')
 };
 
 async function main() {
     const phrases = await bots.phrase();
-    phrases.forEach(e => console.log('>> ' + e.message));
+    bots.image(phrases);
 }
 
-main().then().catch(console.log);
+main().catch(console.log);

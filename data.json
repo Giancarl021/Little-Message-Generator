@@ -1,0 +1,14 @@
+{
+    "phrase": {
+        "phraseCount": 10
+    },
+    "image": {
+        "font": {
+            "phrase": "40px Futura",
+            "author": "25px Consolas"
+        },
+        "fontColor": "black",
+        "textAlign": "center",
+        "wordWrapCharCount": 75
+    }
+}

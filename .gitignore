@@ -1,6 +1,9 @@
 # JetBrains IDE
 .idea/
 
+# Temp files
+temp/
+
 # Logs
 logs
 *.log
