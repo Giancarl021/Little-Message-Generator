@@ -10,8 +10,9 @@ function main(phrases) {
     console.log('>> Initializing image bot');
     let i = 0;
     for (const phrase of phrases) {
-        textToImage(wrapText(phrase.message), font.phrase,`temp/${i++}-msg.png`);
-        textToImage(wrapText(phrase.author), font.author,`temp/${i++}-auth.png`);
+        textToImage(wrapText(phrase.message), font.phrase,`temp/${i}-msg.png`);
+        textToImage(wrapText(phrase.author), font.author,`temp/${i}-auth.png`);
+        i++;
     }
 
     /**

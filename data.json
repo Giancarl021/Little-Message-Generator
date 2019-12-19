@@ -4,7 +4,7 @@
     },
     "image": {
         "font": {
-            "phrase": "40px Futura",
+            "phrase": "40px Arial",
             "author": "25px Consolas"
         },
         "fontColor": "black",
