@@ -1,10 +1,10 @@
 const bots = {
-    browser: require('./bots/phrase')
+    phrase: require('./bots/phrase')
 };
 
 async function main() {
-    const phrases = await bots.browser();
-    console.log(phrases, phrases.length);
+    const phrases = await bots.phrase();
+    phrases.forEach(e => console.log('>> ' + e.message));
 }
 
-main();
+main().then().catch(console.log);
