@@ -1,14 +1,14 @@
 {
     "phrase": {
-        "phraseCount": 10
+        "phraseCount": 15
     },
     "image": {
         "font": {
-            "phrase": "40px Arial",
-            "author": "25px Consolas"
+            "phrase": "60px Arial",
+            "author": "40px Consolas"
         },
         "fontColor": "black",
         "textAlign": "center",
-        "wordWrapCharCount": 75
+        "wordWrapCharCount": 60
     }
 }
