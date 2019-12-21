@@ -5,7 +5,7 @@ const bots = {
 
 async function main() {
     const phrases = await bots.phrase();
-    bots.image(phrases);
+    await bots.image(phrases);
 }
 
 main().catch(console.log);
