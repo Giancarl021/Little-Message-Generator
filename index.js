@@ -8,6 +8,7 @@ async function main() {
     bots.cleaner();
     const phrases = await bots.phrase();
     await bots.image(phrases);
+    console.log('>> Process successfully ended');
 }
 
 main().catch(console.log);

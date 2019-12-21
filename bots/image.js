@@ -1,7 +1,10 @@
 const fs = require('fs');
 const imageHandler = require('text2png');
 const gm = require('gm').subClass({imageMagick: true});
-const {font, fontColor, textAlign, wordWrapCharCount, strokeColor, strokeWidth} = require('./../data').image;
+const imgDownloader = require('image-downloader');
+const data = require('../data/config');
+const {font, fontColor, textAlign, wordWrapCharCount} = data.image;
+const {phraseCount} = data.phrase;
 const msgBackgroundPath = './data/msg-bg.png';
 
 
@@ -9,7 +12,7 @@ async function main(phrases) {
     console.log('>> Initializing image bot');
     const paths = generateImages(phrases);
     await mergeImages(paths);
-    await downloadRandomBackgrounds();
+    await downloadRandomBackgrounds(phraseCount);
 }
 
 function generateImages(phrases) {
@@ -85,6 +88,26 @@ async function mergeImages(paths) {
                     if (err) return reject(err);
                     return resolve();
                 });
+        });
+    }
+}
+
+async function downloadRandomBackgrounds(n) {
+    console.log('>>> Downloading backgrounds');
+    const destinationPath = 'temp/raw-backgrounds';
+    const imageSize = {
+        width: 1920,
+        height: 1080
+    };
+
+    for(let i = 0; i < n; i++) {
+        await downloadImage(`https://picsum.photos/${imageSize.width}/${imageSize.height}?random=${i}.jpg`, `${destinationPath}/${i}.jpg`);
+    }
+
+    async function downloadImage(url, destination) {
+        await imgDownloader.image({
+            url: url,
+            dest: destination
         });
     }
 }

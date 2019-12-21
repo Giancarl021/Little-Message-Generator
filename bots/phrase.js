@@ -1,6 +1,6 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
-const {phraseCount} = require('./../data').phrase;
+const {phraseCount} = require('../data/config').phrase;
 
 async function main() {
   console.log('>> Initializing phrase bot');
