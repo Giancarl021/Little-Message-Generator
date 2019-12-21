@@ -13,18 +13,18 @@ async function main() {
         }
         const phrase = await getPhrase(`https://www.pensador.com/trabalho/${getRandomIndex(1, 268)}`);
         if (!phrase) {
-            console.log('>> Miss load');
+            console.log('>>> Miss load');
             consecutiveMiss++;
             continue;
         }
         if (phrase.message.length > 240) {
-            console.log('>> Skipping long phrase');
+            console.log('>>> Skipping long phrase');
             continue;
         }
 
         for (const p of phrases) {
             if (phrase.message === p.message) {
-                console.log(`>> Skipping equal phrase: ${phrase.origin} | ${p.origin}`);
+                console.log(`>>> Skipping equal phrase: ${phrase.origin} | ${p.origin}`);
                 skip = true;
                 break;
             }
