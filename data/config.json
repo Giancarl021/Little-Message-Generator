@@ -3,9 +3,8 @@
         "phraseCount": 5
     },
     "image": {
-        "font": {
-            "phrase": "60px Arial",
-            "author": "40px Consolas"
+        "text": {
+            "font": "60px Arial"
         },
         "fontColor": "#d76a06",
         "backgroundColor": "#002f5e",

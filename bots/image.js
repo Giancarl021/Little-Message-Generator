@@ -3,7 +3,7 @@ const imageHandler = require('text2png');
 const gm = require('gm').subClass({imageMagick: true});
 const imgDownloader = require('image-downloader');
 const data = require('../data/config');
-const {font, fontColor, backgroundColor, textAlign, wordWrapCharCount} = data.image;
+const {text, fontColor, backgroundColor, textAlign, wordWrapCharCount} = data.image;
 const {phraseCount} = data.phrase;
 
 
@@ -20,8 +20,7 @@ function generateImages(phrases) {
     const paths = [];
     for (const phrase of phrases) {
         const path = `temp/foreground/${i}.png`;
-        textToImage(`${wrapText(phrase.message)}\n\n--- ${wrapText(phrase.author)} ---`, font.phrase, path);
-        // textToImage(wrapText(phrase.author), font.author, `${partialPath}-auth.png`);
+        textToImage(`${wrapText(phrase.message)}\n\n--- ${wrapText(phrase.author)} ---`, text.font, path);
         paths.push({
             text: path,
             background: `temp/background/${i}.jpg`
@@ -101,7 +100,7 @@ async function downloadRandomBackgrounds(n) {
         height: 1080
     };
 
-    for(let i = 0; i < n; i++) {
+    for (let i = 0; i < n; i++) {
         await downloadImage(`https://picsum.photos/${imageSize.width}/${imageSize.height}?random=${i}.jpg`, `${destinationPath}/${i}.jpg`);
     }
 
