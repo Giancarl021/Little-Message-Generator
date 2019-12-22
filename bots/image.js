@@ -3,16 +3,15 @@ const imageHandler = require('text2png');
 const gm = require('gm').subClass({imageMagick: true});
 const imgDownloader = require('image-downloader');
 const data = require('../data/config');
-const {font, fontColor, textAlign, wordWrapCharCount} = data.image;
+const {font, fontColor, backgroundColor, textAlign, wordWrapCharCount} = data.image;
 const {phraseCount} = data.phrase;
-const msgBackgroundPath = './data/msg-bg.png';
 
 
 async function main(phrases) {
     console.log('>> Initializing image bot');
     const paths = generateImages(phrases);
-    await mergeImages(paths);
     await downloadRandomBackgrounds(phraseCount);
+    await mergeImages(paths);
 }
 
 function generateImages(phrases) {
@@ -20,13 +19,14 @@ function generateImages(phrases) {
     let i = 0;
     const paths = [];
     for (const phrase of phrases) {
-        const partialPath = `temp/raw-phrases/${i++}`;
-        textToImage(wrapText(phrase.message), font.phrase, `${partialPath}-msg.png`);
-        textToImage(wrapText(phrase.author), font.author, `${partialPath}-auth.png`);
+        const path = `temp/foreground/${i}.png`;
+        textToImage(`${wrapText(phrase.message)}\n\n--- ${wrapText(phrase.author)} ---`, font.phrase, path);
+        // textToImage(wrapText(phrase.author), font.author, `${partialPath}-auth.png`);
         paths.push({
-            author: `${partialPath}-auth.png`,
-            message: `${partialPath}-msg.png`
+            text: path,
+            background: `temp/background/${i}.jpg`
         });
+        i++;
     }
 
     return paths;
@@ -34,6 +34,10 @@ function generateImages(phrases) {
     function textToImage(text, font, output) {
         fs.writeFileSync(output, imageHandler(text, {
             color: fontColor,
+            backgroundColor: backgroundColor,
+            borderWidth: 7,
+            borderColor: fontColor,
+            padding: 35,
             font: font,
             textAlign: textAlign,
         }));
@@ -70,18 +74,15 @@ async function mergeImages(paths) {
     console.log('>>> Merging images');
     let i = 0;
     for (const path of paths) {
-        await mergeImage(path.author, path.message, `temp/sanitized-phrases/${i++}.png`);
+        await mergeImage(path.background, path.text, `temp/slide/${i++}.png`);
     }
 
-    async function mergeImage(authorPath, messagePath, output) {
+    async function mergeImage(background, foreground, output) {
 
         return new Promise((resolve, reject) => {
             gm()
-                .in(msgBackgroundPath)
-                .in(messagePath)
-                .out('(')
-                .in(authorPath)
-                .out(')')
+                .in(background)
+                .in(foreground)
                 .gravity('Center')
                 .out('-composite')
                 .write(output, err => {
@@ -94,7 +95,7 @@ async function mergeImages(paths) {
 
 async function downloadRandomBackgrounds(n) {
     console.log('>>> Downloading backgrounds');
-    const destinationPath = 'temp/raw-backgrounds';
+    const destinationPath = 'temp/background';
     const imageSize = {
         width: 1920,
         height: 1080
