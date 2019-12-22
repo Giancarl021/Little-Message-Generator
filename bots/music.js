@@ -1,13 +1,13 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
-const AudioContext = require('web-audio-api').AudioContext;
-const MusicTempo = require('music-tempo');
 const fs = require('fs');
+const credentials = require('./../data/credentials');
 
 async function main() {
     console.log('>> Music bot initializing');
-    const musicPath = await fetchMusic();
-    console.log(await getMusicData(musicPath));
+    const musicData = await fetchMusic();
+    musicData.bpm = await getMusicData(musicData.url);
+    console.log(musicData);
 }
 
 async function fetchMusic() {
@@ -20,7 +20,7 @@ async function fetchMusic() {
     const destination = 'temp/music/song.mp3';
     console.log('>>> Downloading music');
     await fetchData(url, destination);
-    return destination;
+    return {url: url, path: destination};
 
     async function getHtml(url) {
         const response = await axios.get(url);
@@ -56,32 +56,28 @@ function getRandomIndex(min, max) {
     return Math.floor(Math.random() * max) + min;
 }
 
-async function getMusicData(path) {
+async function getMusicData(url) {
     console.log('>>> Getting audio data');
-    const audioContext = new AudioContext();
-    const audioData = fs.readFileSync(path);
-    return audioContext.decodeAudioData(audioData, getBeats); // Problema aqui <<<<<<<<<<<<<<<<<<
-
-    function getBeats(buffer) {
-        console.log('<AQUI>');
-        let audioData;
-        if (buffer.numberOfChannels === 2) {
-            audioData = [];
-            const channelsData = [
-                buffer.getChannelData(0),
-                buffer.getChannelData(1)
-            ];
-            const length = channelsData[0].length;
-            for (let i = 0; i < length; i++) {
-                audioData[i] = (channelsData[0][i] + channelsData[1][i]) / 2;
+    const response = await axios({
+        "method": "POST",
+        "url": "https://macgyverapi-song-tempo-detection-v1.p.rapidapi.com/",
+        "headers": {
+            "content-type": "application/json",
+            "x-rapidapi-host": "macgyverapi-song-tempo-detection-v1.p.rapidapi.com",
+            "x-rapidapi-key": credentials.rapidapi.songTempoDetection,
+            "accept": "application/json"
+        }, "data": {
+            "id": "6t7s5d7t",
+            "key": "free",
+            "data": {
+                "audio_file": url
             }
-        } else {
-            audioData = buffer.getChannelData(0);
         }
-        console.log('AAA');
-        const musicTempo = new MusicTempo(audioData);
-        console.log(musicTempo);
-        return musicTempo;
+    });
+    if(response.status === 200) {
+        return response.data.bpm;
+    } else {
+        return null;
     }
 }
 

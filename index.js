@@ -7,8 +7,8 @@ const bots = {
 
 async function main() {
     bots.cleaner();
-    // await bots.music();
-    // process.exit(0);
+    await bots.music();
+    process.exit(0);
     const phrases = await bots.phrase();
     await bots.image(phrases);
     await bots.music();
