@@ -3,7 +3,7 @@ const cheerio = require('cheerio');
 const {phraseCount} = require('../data/config').phrase;
 
 async function main() {
-  console.log('>> Initializing phrase bot');
+    console.log('>> Initializing phrase bot');
     let consecutiveMiss = 0, skip;
     const phrases = [];
     while (phrases.length < phraseCount) {
