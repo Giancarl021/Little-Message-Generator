@@ -2,16 +2,20 @@ const bots = {
     phrase: require('./bots/phrase'),
     image: require('./bots/image'),
     music: require('./bots/music'),
-    cleaner: require('./bots/cleaner')
+    video: require('./bots/video'),
+    cleaner: require('./bots/cleaner'),
+    devTools: require('./bots/dev-tools')
 };
 
 async function main() {
-    bots.cleaner();
-    await bots.music();
-    process.exit(0);
-    const phrases = await bots.phrase();
-    await bots.image(phrases);
-    await bots.music();
+    // const data = {};
+    // bots.cleaner();
+    // data.phrases = await bots.phrase();
+    // data.image = await bots.image(data.phrases);
+    // data.music = await bots.music();
+    // bots.devTools.saveJSON('temp/~data.json', data);
+    // await bots.video(data);
+    await bots.video(bots.devTools.loadJSON('temp/~data.json'));
     console.log('>> Process successfully ended');
 }
 

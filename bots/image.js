@@ -11,7 +11,7 @@ async function main(phrases) {
     console.log('>> Initializing image bot');
     const paths = generateImages(phrases);
     await downloadRandomBackgrounds(phraseCount);
-    await mergeImages(paths);
+    return await mergeImages(paths);
 }
 
 function generateImages(phrases) {
@@ -72,9 +72,14 @@ function generateImages(phrases) {
 async function mergeImages(paths) {
     console.log('>>> Merging images');
     let i = 0;
+    const outputs = [];
     for (const path of paths) {
-        await mergeImage(path.background, path.text, `temp/slide/${i++}.png`);
+        const output = `temp/slide/${i++}.png`;
+        await mergeImage(path.background, path.text, output);
+        outputs.push(output);
     }
+
+    return outputs;
 
     async function mergeImage(background, foreground, output) {
 

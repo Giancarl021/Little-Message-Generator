@@ -7,7 +7,7 @@ async function main() {
     console.log('>> Music bot initializing');
     const musicData = await fetchMusic();
     musicData.bpm = await getMusicData(musicData.url);
-    console.log(musicData);
+    return musicData;
 }
 
 async function fetchMusic() {
