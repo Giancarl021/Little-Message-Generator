@@ -1,6 +1,9 @@
 # Credentials
 data/credentials.json
 
+# Outputs
+output/
+
 # JetBrains IDE
 .idea/
 
