@@ -2,10 +2,12 @@ const videoshow = require('videoshow');
 const ffmpeg = require('fluent-ffmpeg');
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
 const ffprobePath = require('@ffprobe-installer/ffprobe').path;
+const videoOptions = require('./../data/config').video;
 ffmpeg.setFfmpegPath(ffmpegPath);
 ffmpeg.setFfprobePath(ffprobePath);
 
 async function main(data) {
+    console.log('>> Video bot initialing');
     const options = {
         fps: 25,
         loop: 5, // seconds
@@ -20,9 +22,10 @@ async function main(data) {
         pixelFormat: 'yuv420p'
     };
     return new Promise((resolve, reject) => {
+        console.log('>>> Rendering video');
         videoshow(data.image, options)
             .audio(data.music.path)
-            .save('out.mp4')
+            .save(`${videoOptions.outputPath}/${Date.now()}.mp4`)
             .on('error', reject)
             .on('end', resolve)
     });

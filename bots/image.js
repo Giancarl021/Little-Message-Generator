@@ -3,7 +3,7 @@ const imageHandler = require('text2png');
 const gm = require('gm').subClass({imageMagick: true});
 const imgDownloader = require('image-downloader');
 const data = require('../data/config');
-const {text, fontColor, backgroundColor, textAlign, wordWrapCharCount} = data.image;
+const {text, backgroundColor, wordWrapCharCount} = data.image;
 const {phraseCount} = data.phrase;
 
 
@@ -20,7 +20,7 @@ function generateImages(phrases) {
     const paths = [];
     for (const phrase of phrases) {
         const path = `temp/foreground/${i}.png`;
-        textToImage(`${wrapText(phrase.message)}\n\n--- ${wrapText(phrase.author)} ---`, text.font, path);
+        textToImage(`${wrapText(phrase.message)}\n\n--- ${wrapText(phrase.author)} ---`, text, path);
         paths.push({
             text: path,
             background: `temp/background/${i}.jpg`
@@ -32,13 +32,13 @@ function generateImages(phrases) {
 
     function textToImage(text, font, output) {
         fs.writeFileSync(output, imageHandler(text, {
-            color: fontColor,
+            color: font.color,
             backgroundColor: backgroundColor,
             borderWidth: 7,
-            borderColor: fontColor,
+            borderColor: font.color,
             padding: 35,
-            font: font,
-            textAlign: textAlign,
+            font: font.font,
+            textAlign: font.align,
         }));
     }
 

@@ -4,11 +4,23 @@
     },
     "image": {
         "text": {
-            "font": "60px Arial"
+            "font": "60px Arial",
+            "color": "#d76a06",
+            "align": "center"
         },
         "fontColor": "#d76a06",
         "backgroundColor": "#002f5e",
         "textAlign": "center",
         "wordWrapCharCount": 60
+    },
+    "video": {
+        "outputPath": "output",
+        "openingImage": "",
+        "endingImage": "",
+        "time" : {
+            "openingDuration": 0,
+            "endingDuration": 0,
+            "slideDuration": 12
+        }
     }
 }
