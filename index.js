@@ -8,14 +8,14 @@ const bots = {
 };
 
 async function main() {
-    // const data = {};
-    // bots.cleaner();
-    // data.phrases = await bots.phrase();
-    // data.image = await bots.image(data.phrases);
-    // data.music = await bots.music();
-    // bots.devTools.saveJSON('temp/~data.json', data);
-    // await bots.video(data);
-    await bots.video(bots.devTools.loadJSON('temp/~data.json'));
+    const data = {};
+    bots.cleaner();
+    data.phrases = await bots.phrase();
+    data.image = await bots.image(data.phrases);
+    data.music = await bots.music();
+    bots.devTools.saveJSON('temp/~data.json', data);
+    await bots.video(data);
+    // await bots.video(bots.devTools.loadJSON('temp/~data.json'));
     console.log('>> Process successfully ended');
 }
 

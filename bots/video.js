@@ -10,7 +10,7 @@ async function main(data) {
     console.log('>> Video bot initialing');
     const options = {
         fps: 25,
-        loop: 5, // seconds
+        loop: (data.music.bpm / 60) * Math.round(videoOptions.time.slideDuration),
         transition: true,
         transitionDuration: 1, // seconds
         videoBitrate: 8000,
@@ -27,7 +27,10 @@ async function main(data) {
             .audio(data.music.path)
             .save(`${videoOptions.outputPath}/${Date.now()}.mp4`)
             .on('error', reject)
-            .on('end', resolve)
+            .on('end', () => {
+                console.log('>>> Video successfully rendered');
+                resolve();
+            });
     });
 }
 
