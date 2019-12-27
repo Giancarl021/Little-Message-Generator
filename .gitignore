@@ -1,5 +1,6 @@
-# Credentials
+# Local Data
 data/credentials.json
+data/images/
 
 # Outputs
 output/
