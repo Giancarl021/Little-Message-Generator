@@ -12,7 +12,7 @@ async function main() {
         if (consecutiveMiss === 15) {
             throw new Error('Connection Failed');
         }
-        const phrase = await getPhrase(`https://www.pensador.com/trabalho/${getRandomIndex(1, 268)}`);
+        const phrase = await getPhrase(`https://www.osvigaristas.com.br/frases/motivacao/pagina${getRandomIndex(1, 25)}.html`);
         if (!phrase) {
             console.log('>>> Miss load');
             consecutiveMiss++;
@@ -21,6 +21,15 @@ async function main() {
         if (phrase.message.length > 240) {
             console.log('>>> Skipping long phrase');
             continue;
+        }
+
+        if(phrase.message.length < 5) {
+            console.log('>>> Skipping short phrase');
+            continue;
+        }
+
+        if(phrase.author.length === 0) {
+            phrase.author = 'Desconhecido';
         }
 
         for (const p of phrases) {
@@ -39,12 +48,12 @@ async function main() {
 
 async function getPhrase(url) {
     const $ = await getHtml(url);
-    const thoughts = $('.thought-card');
+    const thoughts = $('.col-xs-12');
     const index = Math.floor(Math.random() * thoughts.length);
     const thought = $(thoughts[index]);
     return {
-        message: sanitizeText($(thought).find('p.frase').first().text()),
-        author: sanitizeText($(thought).find('span.autor').first().text()),
+        message: sanitizeText($(thought).find('div.quote > q').first().text()),
+        author: sanitizeText($(thought).find('footer strong').first().text()),
         origin: `${url}[${index}]`
     };
 
