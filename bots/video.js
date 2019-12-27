@@ -12,8 +12,6 @@ const {getAudioDurationInSeconds} = require('get-audio-duration');
 
 async function main(data) {
     console.log('>> Video bot initialing');
-    console.log('>>> Parsing images');
-
     const images = insertImages(data);
     const slideDuration = await getSlideDuration(data, images.length);
     const options = {
@@ -30,11 +28,7 @@ async function main(data) {
         pixelFormat: 'yuv420p'
     };
 
-    data.video = {
-        slides: images,
-        slideDuration: slideDuration,
-        options: options
-    };
+    data.video = options;
 
     await renderVideo(data, images, options);
     return data;
@@ -46,7 +40,7 @@ function calculateBpmDuration(data, seconds) {
 }
 
 function insertImages(data) {
-    console.log('>>> Inserting additional images');
+    console.log('>>> Parsing Images');
     const images = data.image;
 
     if (videoOptions.openingImage && fs.existsSync(videoOptions.openingImage) && fs.lstatSync(videoOptions.openingImage).isFile()) {
