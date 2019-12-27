@@ -6,6 +6,7 @@ async function main() {
     console.log('>> Initializing phrase bot');
     let consecutiveMiss = 0, skip;
     const phrases = [];
+    console.log('>>> Fetching phrases');
     while (phrases.length < phraseCount) {
         skip = false;
         if (consecutiveMiss === 15) {

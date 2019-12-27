@@ -1,5 +1,3 @@
-const fs = require('fs');
-const imageSize = require('image-size');
 const videoshow = require('videoshow');
 const ffmpeg = require('fluent-ffmpeg');
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
@@ -8,55 +6,19 @@ const videoOptions = require('./../data/config').video;
 ffmpeg.setFfmpegPath(ffmpegPath);
 ffmpeg.setFfprobePath(ffprobePath);
 
+const fs = require('fs');
+const imageSize = require('image-size');
+const {getAudioDurationInSeconds} = require('get-audio-duration');
+
 async function main(data) {
     console.log('>> Video bot initialing');
     console.log('>>> Parsing images');
 
-    const images = data.image.map(e => {
-        return {
-            path: e
-        }
-    });
-
-    if (videoOptions.openingImage && fs.existsSync(videoOptions.openingImage) && fs.lstatSync(videoOptions.openingImage).isFile()) {
-        let dim;
-        try {
-            dim = imageSize(videoOptions.openingImage);
-        } catch(e) {
-            console.log('>>> Opening image file is not a image');
-            dim = false;
-        }
-        if(!dim || dim.width !== 1920 || dim.height !== 1080) {
-            if(dim) console.log('>>> Opening image with wrong resolution, resize the image to 1920x1080px');
-        } else {
-            images.unshift({
-                path: videoOptions.openingImage,
-                loop: (typeof videoOptions.time.openingDuration === 'number' && videoOptions.time.openingDuration > 0 ? calculateBpmDuration(data, videoOptions.time.openingDuration) : calculateBpmDuration(5))
-            });
-        }
-    }
-
-    if (videoOptions.endingImage && fs.existsSync(videoOptions.endingImage) && fs.lstatSync(videoOptions.endingImage).isFile()) {
-        let dim;
-        try {
-            dim = imageSize(videoOptions.endingImage);
-        } catch(e) {
-            console.log('>>> Ending image file is not a image');
-            dim = false;
-        }
-        if(!dim || dim.width !== 1920 || dim.height !== 1080) {
-            if(dim) console.log('>>> Ending image with wrong resolution, resize the image to 1920x1080px');
-        } else {
-            images.push({
-                path: videoOptions.endingImage,
-                loop: (typeof videoOptions.time.endingDuration === 'number' && videoOptions.time.endingDuration > 0 ? calculateBpmDuration(data, videoOptions.time.endingDuration) : calculateBpmDuration(5))
-            });
-        }
-    }
-
+    const images = insertImages(data);
+    const slideDuration = await getSlideDuration(data, images.length);
     const options = {
         fps: 25,
-        loop: calculateBpmDuration(data, videoOptions.time.slideDuration),
+        loop: slideDuration,
         transition: true,
         transitionDuration: .7,
         videoBitrate: 8000,
@@ -67,8 +29,73 @@ async function main(data) {
         videoCodec: 'libx264',
         pixelFormat: 'yuv420p'
     };
+
+    data.video = {
+        slides: images,
+        slideDuration: slideDuration,
+        options: options
+    };
+
+    await renderVideo(data, images, options);
+    return data;
+}
+
+function calculateBpmDuration(data, seconds) {
+    const bps = data.music.bpm / 60;
+    return Math.floor(seconds / bps) * bps;
+}
+
+function insertImages(data) {
+    console.log('>>> Inserting additional images');
+    const images = data.image;
+
+    if (videoOptions.openingImage && fs.existsSync(videoOptions.openingImage) && fs.lstatSync(videoOptions.openingImage).isFile()) {
+        let dim;
+        try {
+            dim = imageSize(videoOptions.openingImage);
+        } catch (e) {
+            console.log('>>> Opening image file is not a image');
+            dim = false;
+        }
+        if (!dim || dim.width !== 1920 || dim.height !== 1080) {
+            if (dim) console.log('>>> Opening image with wrong resolution, resize the image to 1920x1080px');
+        } else {
+            images.unshift(videoOptions.openingImage);
+        }
+    }
+
+    if (videoOptions.endingImage && fs.existsSync(videoOptions.endingImage) && fs.lstatSync(videoOptions.endingImage).isFile()) {
+        let dim;
+        try {
+            dim = imageSize(videoOptions.endingImage);
+        } catch (e) {
+            console.log('>>> Ending image file is not a image');
+            dim = false;
+        }
+        if (!dim || dim.width !== 1920 || dim.height !== 1080) {
+            if (dim) console.log('>>> Ending image with wrong resolution, resize the image to 1920x1080px');
+        } else {
+            images.push(videoOptions.endingImage);
+        }
+    }
+    return images;
+}
+
+async function getSlideDuration(data, n) {
+    console.log('>>> Calculating slide duration');
+    let slideDuration;
+    if (videoOptions.slideDuration && typeof videoOptions.slideDuration === 'number') {
+        slideDuration = calculateBpmDuration(data, videoOptions.slideDuration);
+    } else {
+        const audioDuration = await getAudioDurationInSeconds('temp/music/song.mp3');
+        slideDuration = calculateBpmDuration(data, audioDuration / n);
+    }
+    return slideDuration;
+}
+
+async function renderVideo(data, images, options) {
+    console.log('>>> Rendering video');
     return new Promise((resolve, reject) => {
-        console.log('>>> Rendering video');
         videoshow(images, options)
             .audio(data.music.path)
             .save(`${videoOptions.outputPath}/${Date.now()}.mp4`)
@@ -78,10 +105,6 @@ async function main(data) {
                 resolve();
             });
     });
-}
-
-function calculateBpmDuration(data, seconds) {
-    return (data.music.bpm / 60) * Math.round(seconds);
 }
 
 module.exports = main;

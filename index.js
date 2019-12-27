@@ -15,7 +15,6 @@ async function main() {
     data.music = await bots.music();
     await bots.video(data);
     bots.devTools.saveJSON('temp/data.json', data);
-    // await bots.video(bots.devTools.loadJSON('temp/data.json'));
     console.log('>> Process successfully ended');
 }
 

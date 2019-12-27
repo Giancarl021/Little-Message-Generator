@@ -17,11 +17,7 @@
         "outputPath": "output",
         "openingImage": "data/images/opening.png",
         "endingImage": "data/images/ending.png",
-        "time": {
-            "openingDuration": 2,
-            "endingDuration": 2,
-            "slideDuration": 8
-        }
+        "slideDuration": "auto"
     },
     "dev": {
         "useExec": false
