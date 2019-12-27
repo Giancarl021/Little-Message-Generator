@@ -1,11 +1,12 @@
 const fs = require('fs');
 const imageHandler = require('text2png');
-const gm = require('gm').subClass({ imageMagick: true });
+const gm = require('gm').subClass({imageMagick: true});
 const imgDownloader = require('image-downloader');
 const data = require('../data/config');
-const { text, backgroundColor, wordWrapCharCount } = data.image;
-const { phraseCount } = data.phrase;
-const { exec } = require('child_process');
+const {text, backgroundColor, wordWrapCharCount} = data.image;
+const {phraseCount} = data.phrase;
+const {exec} = require('child_process');
+const {useExec} = data.dev;
 
 async function main(phrases) {
     console.log('>> Initializing image bot');
@@ -84,19 +85,22 @@ async function mergeImages(paths) {
     async function mergeImage(background, foreground, output) {
 
         return new Promise((resolve, reject) => {
-            exec(`magick ${background} ${foreground} -gravity Center -composite ${output}`, (err, stdout, stderr) => {
-                if(err) reject(err);
-                resolve();
-            });
-            // gm()
-            //     .in(background)
-            //     .in(foreground)
-            //     .gravity('Center')
-            //     .out('-composite')
-            //     .write(output, err => {
-            //         if (err) return reject(err);
-            //         return resolve();
-            //     });
+            if (useExec) {
+                exec(`magick ${background} ${foreground} -gravity Center -composite ${output}`, (err, stdout, stderr) => {
+                    if (err) reject(err);
+                    resolve();
+                });
+            } else {
+                gm()
+                    .in(background)
+                    .in(foreground)
+                    .gravity('Center')
+                    .out('-composite')
+                    .write(output, err => {
+                        if (err) return reject(err);
+                        return resolve();
+                    });
+            }
         });
     }
 }

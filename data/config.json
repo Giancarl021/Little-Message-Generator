@@ -22,5 +22,8 @@
             "endingDuration": 0,
             "slideDuration": 12
         }
+    },
+    "dev": {
+        "useExec": false
     }
 }
