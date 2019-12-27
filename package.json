@@ -24,6 +24,7 @@
     "fluent-ffmpeg": "^2.1.2",
     "gm": "^1.23.1",
     "image-downloader": "^3.5.0",
+    "image-size": "^0.8.3",
     "text2png": "^2.3.0",
     "videoshow": "^0.1.11"
   }

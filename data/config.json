@@ -1,6 +1,6 @@
 {
     "phrase": {
-        "phraseCount": 5
+        "phraseCount": 15
     },
     "image": {
         "text": {
@@ -15,12 +15,12 @@
     },
     "video": {
         "outputPath": "output",
-        "openingImage": "",
-        "endingImage": "",
-        "time" : {
-            "openingDuration": 0,
-            "endingDuration": 0,
-            "slideDuration": 12
+        "openingImage": "data/images/opening.png",
+        "endingImage": "data/images/ending.png",
+        "time": {
+            "openingDuration": 2,
+            "endingDuration": 2,
+            "slideDuration": 8
         }
     },
     "dev": {
