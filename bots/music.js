@@ -2,6 +2,8 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const fs = require('fs');
 const credentials = require('./../data/credentials');
+const musicSrc = require('./../data/config').src.music;
+
 
 async function main() {
     console.log('>> Music bot initializing');
@@ -12,11 +14,12 @@ async function main() {
 
 async function fetchMusic() {
     console.log('>>> Searching music');
-    const $ = await getHtml(`https://www.freemusicarchive.org/genre/Soundtrack?sort=track_date_published&d=1&page=${getRandomIndex(1, 421)}`);
-    const musics = $('.play-item');
+    const {pages, elements} = musicSrc;
+    const $ = await getHtml(musicSrc.url + pages.prefix + getRandomIndex(pages.min, pages.max) + pages.sufix);
+    const musics = $(elements.parentElement);
     const index = Math.floor(Math.random() * musics.length);
     const music = $(musics[index]);
-    const url = $(music).find('.playicn > a').attr('href');
+    const url = $(music).find(elements.musicElement).attr(elements.musicUrlAttribute);
     const destination = 'temp/music/song.mp3';
     console.log('>>> Downloading music');
     await fetchData(url, destination);

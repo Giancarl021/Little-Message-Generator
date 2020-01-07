@@ -20,10 +20,10 @@ async function main(data) {
         transition: true,
         transitionDuration: .7,
         videoBitrate: 8000,
-        size: '1920x1080',
+        size: `${videoOptions.resolution.width}x${videoOptions.resolution.height}`,
         audioBitrate: '128k',
         audioChannels: 2,
-        format: 'mp4',
+        format: videoOptions.format,
         videoCodec: 'libx264',
         pixelFormat: 'yuv420p'
     };

@@ -1,6 +1,8 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
-const {phraseCount} = require('../data/config').phrase;
+const configs = require('./../data/config');
+const {phraseCount} = configs.phrase;
+const phraseSrc = configs.src.phrase;
 
 async function main() {
     console.log('>> Initializing phrase bot');
@@ -12,7 +14,8 @@ async function main() {
         if (consecutiveMiss === 15) {
             throw new Error('Connection Failed');
         }
-        const phrase = await getPhrase(`https://www.osvigaristas.com.br/frases/motivacao/pagina${getRandomIndex(1, 25)}.html`);
+        const {url, pages} = phraseSrc;
+        const phrase = await getPhrase(url + pages.prefix + getRandomIndex(pages.min, pages.max) + pages.sufix);
         if (!phrase) {
             console.log('>>> Miss load');
             consecutiveMiss++;
@@ -48,12 +51,13 @@ async function main() {
 
 async function getPhrase(url) {
     const $ = await getHtml(url);
-    const thoughts = $('.col-xs-12');
+    const {parentElement, messageElement, authorElement} = phraseSrc.elements;
+    const thoughts = $(parentElement);
     const index = Math.floor(Math.random() * thoughts.length);
     const thought = $(thoughts[index]);
     return {
-        message: sanitizeText($(thought).find('div.quote > q').first().text()),
-        author: sanitizeText($(thought).find('footer strong').first().text()),
+        message: sanitizeText($(thought).find(messageElement).first().text()),
+        author: sanitizeText($(thought).find(authorElement).first().text()),
         origin: `${url}[${index}]`
     };
 

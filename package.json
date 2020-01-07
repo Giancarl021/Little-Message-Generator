@@ -4,7 +4,9 @@
   "description": "A bot sequence that create a mp4 with motivational quotes",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "install": "mkdir output && mkdir temp && mkdir temp/background && mkdir temp/foreground && mkdir temp/music && mkdir temp/slide",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ."
   },
   "repository": {
     "type": "git",

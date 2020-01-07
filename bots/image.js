@@ -4,6 +4,7 @@ const gm = require('gm').subClass({imageMagick: true});
 const imgDownloader = require('image-downloader');
 const data = require('../data/config');
 const {text, backgroundColor, wordWrapCharCount} = data.image;
+const {resolution} = data.video;
 const {phraseCount} = data.phrase;
 const {exec} = require('child_process');
 const {useExec} = data.dev;
@@ -108,13 +109,9 @@ async function mergeImages(paths) {
 async function downloadRandomBackgrounds(n) {
     console.log('>>> Downloading backgrounds');
     const destinationPath = 'temp/background';
-    const imageSize = {
-        width: 1920,
-        height: 1080
-    };
 
     for (let i = 0; i < n; i++) {
-        await downloadImage(`https://picsum.photos/${imageSize.width}/${imageSize.height}?random=${i}.jpg`, `${destinationPath}/${i}.jpg`);
+        await downloadImage(`https://picsum.photos/${resolution.width}/${resolution.height}?random=${i}.jpg`, `${destinationPath}/${i}.jpg`);
     }
 
     async function downloadImage(url, destination) {

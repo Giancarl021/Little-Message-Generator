@@ -1,4 +1,34 @@
 {
+    "src": {
+        "phrase": {
+            "url": "https://www.osvigaristas.com.br/frases/motivacao/",
+            "pages": {
+                "min": 1,
+                "max": 25,
+                "prefix": "pagina",
+                "sufix": ".html"
+            },
+            "elements": {
+                "parentElement": ".col-xs-12",
+                "messageElement": "div.quote > q",
+                "authorElement": "footer strong"
+            }
+        },
+        "music": {
+            "url": "https://www.freemusicarchive.org/genre/Soundtrack",
+            "pages": {
+                "min": 1,
+                "max": 421,
+                "prefix": "?sort=track_date_published&d=1&page=",
+                "sufix": ""
+            },
+            "elements": {
+                "parentElement": ".play-item",
+                "musicElement": ".playicn > a",
+                "musicUrlAttribute": "href"
+            }
+        }
+    },
     "phrase": {
         "phraseCount": 15
     },
@@ -15,7 +45,12 @@
         "outputPath": "output",
         "openingImage": "data/images/opening.png",
         "endingImage": "data/images/ending.png",
-        "slideDuration": "auto"
+        "slideDuration": "auto",
+        "resolution": {
+            "width": 1920,
+            "height": 1080
+        },
+        "format": "mp4"
     },
     "dev": {
         "useExec": false
